@@ -20,4 +20,8 @@
  - Creator service: harden packs routes (guard rowCount nullability, ensure computed insert index is numeric)
  - Mobile app: adjust Jest config for pnpm (.pnpm transformIgnore), map react-test-renderer@18, and add RN polyfills including setImmediate
  - Web app: render Onboard form while status check runs; stabilize PackBuilder/Onboard tests with AuthContext mocks and resilient network call assertions
- - Web app tests: update autosave/patch/delete/create tests to account for initial GETs and debounce behavior
+- Web app tests: update autosave/patch/delete/create tests to account for initial GETs and debounce behavior
+ - Web marketplace: add list and detail pages with search/sort, average rating (stars), follow/unfollow, and review posting; add Stars and ReviewItem components
+ - Web reviews UX: sorting (newest/highest/lowest) and “Load more” pagination on Marketplace Detail
+ - Mobile marketplace: add pull-to-refresh to list and sorting toggles (newest/title); detail shows avg rating with stars and disables actions while busy
+ - CI: add lint job with pnpm workspace and optional Turbo Remote Cache job (controlled via TURBO_TEAM/TURBO_TOKEN)
