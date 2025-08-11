@@ -1,0 +1,23 @@
+# Change Log
+
+## [Unreleased]
+- Add TASKS.md: initial high-level tasks, complexity analysis, and decomposition for Foundation & Authentication
+- Replace TASKS.md with full decomposition and dependency analysis
+- Scaffold monorepo structure and core configs (package.json, tsconfig.base.json, .eslintrc.js, .prettierrc, turbo.json, jest.config.js, .gitignore, CI workflow)
+- Add initial database migration for Users and Creators tables (001_initial.sql) and `db:migrate` script
+- Scaffold auth-service with registration, login, token refresh, password hashing, JWT issuance, DB integration for refresh tokens, OAuth2 stubs, basic password policy enforcement, and MFA stubs
+- Add basic unit tests for auth flows (registration, login, refresh)
+- Add how-to-start-application.md and how-to-run-tests.md for setup and testing instructions
+- Scaffold llm-service package with OpenAI integration, prompt wrappers, and unit tests
+- Add DB migration 002_add_moderation_log.sql for moderation log
+- Add Creator service: onboarding, llm & pack submission, reviews & follow endpoints, DB integration, and tests
+- Scaffold mobile-app with React Native, navigation, placeholder screens, API client, and UI tests
+- Add DB migration 004_create_packs.sql for Packs table used by marketplace, reviews, and submission flows
+- Creator service: add public marketplace endpoint GET /packs
+- Creator service: add GET /creators/:id/follow to return follow status for a user
+- Fix duplicate import/route bug in creator-service src/index.ts and mount marketplace routes
+ - Root: pin react-test-renderer via pnpm overrides to ensure RN tests run under pnpm
+ - Creator service: harden packs routes (guard rowCount nullability, ensure computed insert index is numeric)
+ - Mobile app: adjust Jest config for pnpm (.pnpm transformIgnore), map react-test-renderer@18, and add RN polyfills including setImmediate
+ - Web app: render Onboard form while status check runs; stabilize PackBuilder/Onboard tests with AuthContext mocks and resilient network call assertions
+ - Web app tests: update autosave/patch/delete/create tests to account for initial GETs and debounce behavior
