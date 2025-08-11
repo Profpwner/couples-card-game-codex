@@ -10,6 +10,8 @@ import {
   unfollowCreatorViaProxy,
   postReviewViaProxy,
 } from '../../lib/proxyClient';
+import Stars from '../../components/Stars';
+import ReviewItem, { Review as ReviewModel } from '../../components/ReviewItem';
 
 interface PackDetail { pack_id: string; creator_id: string; title: string; description?: string; created_at: string }
 interface Review { review_id: string; user_id: string; rating: number; review_text?: string; created_at: string }
@@ -25,6 +27,8 @@ export default function MarketplaceDetailPage() {
   const { user } = useAuth();
   const [pack, setPack] = useState<PackDetail | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [sort, setSort] = useState<'newest' | 'highest' | 'lowest'>('newest');
+  const [visible, setVisible] = useState(5);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -65,6 +69,15 @@ export default function MarketplaceDetailPage() {
     if (!reviews.length) return 0;
     return reviews.reduce((a, b) => a + (b.rating || 0), 0) / reviews.length;
   }, [reviews]);
+
+  const sorted = useMemo(() => {
+    const arr = [...reviews];
+    if (sort === 'highest') arr.sort((a,b) => b.rating - a.rating || Date.parse(b.created_at) - Date.parse(a.created_at));
+    else if (sort === 'lowest') arr.sort((a,b) => a.rating - b.rating || Date.parse(b.created_at) - Date.parse(a.created_at));
+    // newest default: created_at DESC (already by API) but ensure
+    else arr.sort((a,b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+    return arr;
+  }, [reviews, sort]);
 
   const toggleFollow = async () => {
     if (!pack?.creator_id || !user?.userId) return;
@@ -118,6 +131,14 @@ export default function MarketplaceDetailPage() {
 
           <hr />
           <h2>Reviews</h2>
+          <div style={{ marginBottom: 8 }}>
+            <label>Sort:&nbsp;</label>
+            <select value={sort} onChange={e => { setSort(e.target.value as any); setVisible(5); }}>
+              <option value="newest">Newest</option>
+              <option value="highest">Highest Rated</option>
+              <option value="lowest">Lowest Rated</option>
+            </select>
+          </div>
           <div style={{ margin: '12px 0' }}>
             <label style={{ marginRight: 8 }}>Your Rating:</label>
             <select value={rating} onChange={e => setRating(Number(e.target.value))}>
@@ -138,21 +159,17 @@ export default function MarketplaceDetailPage() {
             </div>
           </div>
 
-          {reviews.length === 0 && <p>No reviews yet.</p>}
+          {sorted.length === 0 && <p>No reviews yet.</p>}
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            {reviews.map(r => (
-              <li key={r.review_id} style={{ borderTop: '1px solid #eee', padding: '8px 0' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Stars rating={r.rating} />
-                  <span style={{ color: '#999' }}>{new Date(r.created_at).toLocaleDateString()}</span>
-                </div>
-                {r.review_text && <p style={{ marginTop: 4 }}>{r.review_text}</p>}
-              </li>
+            {sorted.slice(0, visible).map((r: ReviewModel) => (
+              <ReviewItem key={r.review_id} review={r} />
             ))}
           </ul>
+          {visible < sorted.length && (
+            <button onClick={() => setVisible(v => v + 5)} style={{ marginTop: 8 }}>Load more</button>
+          )}
         </div>
       )}
     </Layout>
   );
 }
-
