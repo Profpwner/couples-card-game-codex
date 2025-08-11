@@ -1,0 +1,85 @@
+name: Initialize Web+Mobile GA Tracking
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  setup-tracking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create milestone and tracking issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const milestoneTitle = 'Web+Mobile GA';
+            const milestoneDescription = [
+              'Milestone for fully built-out Web (Next.js) and Mobile (Expo) apps.',
+              'Includes Pack Builder, Marketplace, Onboarding, and core service integrations with green tests.'
+            ].join('\n');
+
+            // Ensure milestone exists
+            const { data: openMilestones } = await github.rest.issues.listMilestones({ owner, repo, state: 'open', per_page: 100 });
+            let milestone = openMilestones.find(m => m.title === milestoneTitle);
+            if (!milestone) {
+              const created = await github.rest.issues.createMilestone({ owner, repo, title: milestoneTitle, description: milestoneDescription });
+              milestone = created.data;
+              core.info(`Created milestone #${milestone.number}`);
+            } else {
+              core.info(`Milestone already exists: #${milestone.number}`);
+            }
+
+            // Ensure label exists (tracking)
+            const labelName = 'tracking';
+            try {
+              await github.rest.issues.getLabel({ owner, repo, name: labelName });
+            } catch (e) {
+              if (e.status === 404) {
+                await github.rest.issues.createLabel({ owner, repo, name: labelName, color: '0e8a16', description: 'Tracking/umbrella issues' });
+                core.info('Created label: tracking');
+              } else {
+                throw e;
+              }
+            }
+
+            const issueTitle = 'Tracking: Web+Mobile GA';
+            // Look for an existing open issue with the same title
+            const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open', per_page: 100 });
+            let tracking = issues.find(i => i.title === issueTitle);
+            if (!tracking) {
+              const body = `
+### Goal
+Ship fully built out Web (Next.js) and Mobile (Expo) apps with passing tests and documented release process.
+
+### Checklist
+- [ ] Web: Creator Dashboard skeleton finalized
+- [ ] Web: Pack Builder — list, add modal, drag-and-drop, CRUD, autosave
+- [ ] Web: Pack submission via proxy and success UX
+- [ ] Web: Marketplace List & Detail pages wired to backend
+- [ ] Web: Creator Onboarding flow + status redirect
+- [ ] Web: Analytics page stubbed (MVP)
+- [ ] Mobile: Navigation stack configured
+- [ ] Mobile: Home, Marketplace List & Detail screens
+- [ ] Mobile: API client integration
+- [ ] Mobile: Purchase flow UI stub
+- [ ] Services: Creator endpoints (packs CRUD, submit) stable
+- [ ] Services: LLM endpoints hooked up
+- [ ] Services: Reviews & Follow endpoints available
+- [ ] DB: migrations applied for Packs, ModerationLog, Reviews, Follows
+- [ ] CI: \`pnpm -w test\` green across repo
+- [ ] Release: prepare GitHub Release using v0.1.0 notes as baseline
+
+### Notes
+- Node 22 punycode deprecation warnings are non-blocking in tests.
+- Consider React version alignment between web and mobile if needed.
+`;
+              const createdIssue = await github.rest.issues.create({ owner, repo, title: issueTitle, body, milestone: milestone.number, labels: [labelName] });
+              tracking = createdIssue.data;
+              core.info(`Created tracking issue #${tracking.number}`);
+            } else {
+              core.info(`Tracking issue already exists: #${tracking.number}`);
+            }
