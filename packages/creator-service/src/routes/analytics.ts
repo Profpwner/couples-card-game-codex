@@ -33,3 +33,27 @@ router.get('/analytics/engagement', async (req, res) => {
 
 export default router;
 
+
+
+// Weekly trend stub: last 7 days sales and readers
+router.get('/analytics/trends', async (req, res) => {
+  const userId = (req as any).user?.userId || (req.query.userId as string | undefined);
+  if (!userId) return res.status(400).json({ error: 'userId (JWT or query) required' });
+  try {
+    const today = new Date();
+    const labels: string[] = [];
+    const sales: number[] = [];
+    const readers: number[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      labels.push(`${d.getMonth()+1}/${d.getDate()}`);
+      sales.push(Math.floor(Math.random() * 20));
+      readers.push(Math.floor(Math.random() * 100));
+    }
+    res.json({ labels, sales, readers });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch trends' });
+  }
+});

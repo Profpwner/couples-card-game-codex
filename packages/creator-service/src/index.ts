@@ -10,6 +10,7 @@ import packRoutes from './routes/packs';
 import socialRoutes from './routes/social';
 import marketplaceRoutes from './routes/marketplace';
 import { authenticate } from './lib/auth';
+import profileRoutes from './routes/profile';
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 const app = express();
@@ -35,6 +36,9 @@ app.use('/', marketplaceRoutes);
 
 // Reviews & follows endpoints
 app.use('/', socialRoutes);
+
+// Creator public profile endpoint
+app.use('/', profileRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

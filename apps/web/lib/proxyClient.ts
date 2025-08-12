@@ -82,3 +82,8 @@ export async function getFollowStatusViaProxy(creatorId: string, userId: string)
   const json = await res.json();
   return !!json?.isFollowing;
 }
+
+export async function fetchCreatorProfileViaProxy(creatorId: string) {
+  const res = await appFetch(`/api/creator/creators/${creatorId}/profile`, { method: 'GET', credentials: 'include' });
+  return res.json();
+}
