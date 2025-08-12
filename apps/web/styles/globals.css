@@ -66,3 +66,11 @@ article[role="button"]:focus-visible {
 button[aria-label*="Close"]:focus-visible {
   box-shadow: 0 0 0 3px var(--focus-ring-color);
 }
+
+
+/* Active nav link styling */
+nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration-thickness: 3px;
+  border-bottom: 2px solid var(--link-active-color);
+}

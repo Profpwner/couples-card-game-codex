@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { useRouter } from 'next/router';
 import ThemeToggle from './ThemeToggle';
 import BackToTop from './BackToTop';
 
@@ -9,6 +10,8 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const { isAuthenticated, user, logout } = useAuth();
+  const router = useRouter();
+  const path = router?.pathname || '';
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
@@ -57,10 +60,10 @@ export default function Layout({ children }: LayoutProps) {
           Skip to navigation
         </a>
         <nav id="primary-nav" aria-label="Primary">
-          <a href="/dashboard" aria-label="Go to Dashboard">Dashboard</a>
-          <a href="/proxy-demo" aria-label="Open Proxy Demo" style={{ marginLeft: 12 }}>Proxy Demo</a>
-          <a href="/onboard" aria-label="Creator Onboarding" style={{ marginLeft: 12 }}>Onboard</a>
-          <a href="/analytics" aria-label="View Analytics" style={{ marginLeft: 12 }}>Analytics</a>
+          <a href="/dashboard" aria-label="Go to Dashboard" aria-current={path === '/dashboard' ? 'page' : undefined}>Dashboard</a>
+          <a href="/proxy-demo" aria-label="Open Proxy Demo" aria-current={path === '/proxy-demo' ? 'page' : undefined} style={{ marginLeft: 12 }}>Proxy Demo</a>
+          <a href="/onboard" aria-label="Creator Onboarding" aria-current={path === '/onboard' ? 'page' : undefined} style={{ marginLeft: 12 }}>Onboard</a>
+          <a href="/analytics" aria-label="View Analytics" aria-current={path === '/analytics' ? 'page' : undefined} style={{ marginLeft: 12 }}>Analytics</a>
           <span style={{ marginLeft: 16 }} />
           {isAuthenticated ? (
             <>
