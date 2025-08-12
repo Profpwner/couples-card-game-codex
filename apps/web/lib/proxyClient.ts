@@ -5,7 +5,7 @@ export interface ReviewPayload {
 }
 
 export async function postReviewViaProxy(payload: ReviewPayload) {
-  const res = await fetch(`/api/creator/packs/${payload.packId}/reviews`, {
+  const res = await appFetch(`/api/creator/packs/${payload.packId}/reviews`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -16,7 +16,7 @@ export async function postReviewViaProxy(payload: ReviewPayload) {
 }
 
 export async function followCreatorViaProxy(creatorId: string) {
-  const res = await fetch(`/api/creator/creators/${creatorId}/follow`, {
+  const res = await appFetch(`/api/creator/creators/${creatorId}/follow`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -26,7 +26,7 @@ export async function followCreatorViaProxy(creatorId: string) {
 }
 
 export async function unfollowCreatorViaProxy(creatorId: string) {
-  const res = await fetch(`/api/creator/creators/${creatorId}/follow`, {
+  const res = await appFetch(`/api/creator/creators/${creatorId}/follow`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -36,7 +36,7 @@ export async function unfollowCreatorViaProxy(creatorId: string) {
 }
 
 export async function submitPackViaProxy(packId: string) {
-  const res = await fetch(`/api/creator/packs/${packId}/submit`, {
+  const res = await appFetch(`/api/creator/packs/${packId}/submit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -46,7 +46,7 @@ export async function submitPackViaProxy(packId: string) {
 }
 
 export async function listPacksViaMarketplaceProxy() {
-  const res = await fetch(`/api/marketplace/packs`, {
+  const res = await appFetch(`/api/marketplace/packs`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -56,7 +56,7 @@ export async function listPacksViaMarketplaceProxy() {
 }
 
 export async function fetchPackViaMarketplaceProxy(packId: string) {
-  const res = await fetch(`/api/marketplace/packs/${packId}`, {
+  const res = await appFetch(`/api/marketplace/packs/${packId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -66,7 +66,7 @@ export async function fetchPackViaMarketplaceProxy(packId: string) {
 }
 
 export async function fetchReviewsViaCreatorProxy(packId: string) {
-  const res = await fetch(`/api/creator/packs/${packId}/reviews`, {
+  const res = await appFetch(`/api/creator/packs/${packId}/reviews`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -77,7 +77,7 @@ export async function fetchReviewsViaCreatorProxy(packId: string) {
 
 export async function getFollowStatusViaProxy(creatorId: string, userId: string) {
   const url = `/api/creator/creators/${creatorId}/follow?userId=${encodeURIComponent(userId)}`;
-  const res = await fetch(url, { method: 'GET', credentials: 'include' });
+  const res = await appFetch(url, { method: 'GET', credentials: 'include' });
   if (!res.ok) throw new Error('Failed to fetch follow status');
   const json = await res.json();
   return !!json?.isFollowing;

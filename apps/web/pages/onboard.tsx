@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast';
 import Layout from '../components/Layout';
 import { RequireAuth, useAuth } from '../components/AuthContext';
 import { useRouter } from 'next/router';
+import { appFetch } from '../lib/appFetch';
 
 export default function OnboardPage() {
   return (
@@ -27,7 +28,7 @@ function OnboardForm() {
     const check = async () => {
       if (!user?.userId) return;
       try {
-        const r = await fetch(`/api/creator/status?userId=${user.userId}`);
+        const r = await appFetch(`/api/creator/status?userId=${user.userId}`);
         const d = await r.json();
         if (d?.isCreator) {
           router.replace('/dashboard');
@@ -42,7 +43,7 @@ function OnboardForm() {
   const submit = async () => {
     try {
       setStatus('Submitting...');
-      const res = await fetch('/api/creator/onboard', {
+      const res = await appFetch('/api/creator/onboard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

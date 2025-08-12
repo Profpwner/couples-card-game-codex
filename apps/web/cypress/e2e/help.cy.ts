@@ -3,6 +3,8 @@ describe('Help overlay opens via keyboard and buttons', () => {
     cy.visit('/');
     cy.get('body').type('?');
     cy.contains('Keyboard Shortcuts').should('exist');
+    cy.get('body').type('{esc}');
+    cy.contains('Keyboard Shortcuts').should('not.exist');
   });
 
   it('opens via nav Help button', () => {
