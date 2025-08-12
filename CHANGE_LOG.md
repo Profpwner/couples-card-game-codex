@@ -30,3 +30,7 @@
  - Mobile marketplace: add Clear search button and styled pill toggles for sort indicators
  - Mobile detail: add review sorting (newest/highest/lowest) and Load more pagination
  - CI PR annotations: add ESLint reviewdog to comment on pull requests
+ - Web a11y: add "Skip to content" link in Layout, ARIA labels for PackBuilder inputs/modal, aria-live status messages
+ - Drag-and-drop: switch from deprecated react-beautiful-dnd to maintained @hello-pangea/dnd
+ - Storybook: pin Storybook packages to 9.1.2 series to reduce peer warnings; enable a11y addon; add a11y parameters to Review stories
+ - Storybook: add MarketplaceCard component and integrate cards into MarketplaceListPanel
