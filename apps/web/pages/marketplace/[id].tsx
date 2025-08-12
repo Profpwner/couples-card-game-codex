@@ -12,6 +12,7 @@ import {
 } from '../../lib/proxyClient';
 import Stars from '../../components/Stars';
 import ReviewItem, { Review as ReviewModel } from '../../components/ReviewItem';
+import ReviewsHistogram from '../../components/ReviewsHistogram';
 
 interface PackDetail { pack_id: string; creator_id: string; title: string; description?: string; created_at: string }
 interface Review { review_id: string; user_id: string; rating: number; review_text?: string; created_at: string }
@@ -36,6 +37,7 @@ export default function MarketplaceDetailPage() {
   const [reviewBusy, setReviewBusy] = useState(false);
   const [rating, setRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -103,6 +105,8 @@ export default function MarketplaceDetailPage() {
       setReviews(Array.isArray(r) ? r : []);
       setReviewText('');
       setRating(5);
+      setToast('Review posted!');
+      setTimeout(() => setToast(null), 1500);
     } catch (e) {
       console.error(e);
     } finally {
@@ -122,6 +126,12 @@ export default function MarketplaceDetailPage() {
           <div style={{ margin: '8px 0' }}>
             <strong>Average Rating:</strong> <Stars rating={avgRating} /> ({reviews.length})
           </div>
+          <ReviewsHistogram ratings={reviews.map(r => r.rating)} />
+          {toast && (
+            <div style={{ position: 'fixed', right: 16, bottom: 16, background: '#333', color: '#fff', padding: '8px 12px', borderRadius: 6 }}>
+              {toast}
+            </div>
+          )}
           <div style={{ margin: '8px 0' }}>
             <button onClick={toggleFollow} disabled={!user?.userId || followBusy}>
               {isFollowing ? 'Unfollow Creator' : 'Follow Creator'}
