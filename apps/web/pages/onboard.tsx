@@ -81,10 +81,10 @@ function OnboardForm() {
       <label style={{ display: 'block', marginBottom: 12 }}>
         <input type="checkbox" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} /> I agree to the Terms of Service
       </label>
-      <button onClick={submit} disabled={!displayName || !payoutToken || !termsAccepted}>
+      <button onClick={submit} disabled={!displayName || !payoutToken || !termsAccepted} aria-busy={status === "Submitting..."}>
         Complete Onboarding
       </button>
-      {status && <p style={{ marginTop: 12 }}>{status}</p>}
+      <p role="status" aria-live="polite" style={{ marginTop: 12 }}>{status}</p>
     </div>
   );
 }

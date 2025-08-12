@@ -116,7 +116,7 @@ export default function PackBuilder() {
   }, [packId, JSON.stringify(cards)]);
 
   return (
-    <div>
+    <div aria-busy={isSaving ? true : undefined}>
       <div style={{ marginBottom: '1rem' }}>
         <label htmlFor="pack-id-input">Pack ID:&nbsp;</label>
         <input id="pack-id-input" aria-label="Pack ID" value={packId} onChange={e => setPackId(e.target.value)} placeholder="e.g. p1" />
