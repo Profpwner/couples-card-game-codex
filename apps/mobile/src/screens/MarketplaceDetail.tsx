@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, Button, ScrollView, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, Button, ScrollView, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
@@ -29,6 +29,8 @@ export default function MarketplaceDetail({ route }: Props) {
 
   const userId = 'demo-user'; // TODO: replace with real auth context
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [sort, setSort] = useState<'newest' | 'highest' | 'lowest'>('newest');
+  const [visible, setVisible] = useState(5);
   const [rating, setRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
   const [isFollowing, setIsFollowing] = useState(false);
@@ -50,6 +52,8 @@ export default function MarketplaceDetail({ route }: Props) {
       const newRev = await postReview(packId, userId, rating, reviewText);
       setReviews([newRev, ...reviews]);
       setReviewText('');
+      // Reset visible to show new item and give a lightweight feedback text
+      setVisible(v => Math.max(v, 5));
     } catch (e) {
       console.error(e);
     } finally {
@@ -75,6 +79,14 @@ export default function MarketplaceDetail({ route }: Props) {
     if (!reviews.length) return 0;
     return reviews.reduce((a, b) => a + (b.rating || 0), 0) / reviews.length;
   }, [reviews]);
+
+  const sorted = useMemo(() => {
+    const arr = [...reviews];
+    if (sort === 'highest') arr.sort((a,b) => b.rating - a.rating || Date.parse(b.created_at) - Date.parse(a.created_at));
+    else if (sort === 'lowest') arr.sort((a,b) => a.rating - b.rating || Date.parse(b.created_at) - Date.parse(a.created_at));
+    else arr.sort((a,b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+    return arr;
+  }, [reviews, sort]);
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
@@ -107,14 +119,30 @@ export default function MarketplaceDetail({ route }: Props) {
       />
       <Button title="Submit Review" disabled={reviewBusy} onPress={handleSubmitReview} />
 
-      <Text style={{ fontSize: 20, marginTop: 16 }}>Reviews</Text>
-      {reviews.map(r => (
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 8 }}>
+        <Text style={{ fontSize: 20, marginRight: 12 }}>Reviews</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => { setSort('newest'); setVisible(5); }} style={{ marginRight: 8 }}>
+            <Text style={{ color: sort === 'newest' ? '#333' : '#888' }}>Newest</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { setSort('highest'); setVisible(5); }} style={{ marginRight: 8 }}>
+            <Text style={{ color: sort === 'highest' ? '#333' : '#888' }}>Highest</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { setSort('lowest'); setVisible(5); }}>
+            <Text style={{ color: sort === 'lowest' ? '#333' : '#888' }}>Lowest</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {sorted.slice(0, visible).map(r => (
         <View key={r.review_id} style={{ marginVertical: 8 }}>
           <Text style={{ fontWeight: 'bold' }}>Rating: <Stars rating={r.rating} /></Text>
           {r.review_text ? <Text>{r.review_text}</Text> : null}
           <Text style={{ fontSize: 12, color: '#666' }}>{new Date(r.created_at).toLocaleString()}</Text>
         </View>
       ))}
+      {visible < sorted.length && (
+        <Button title="Load more" onPress={() => setVisible(v => v + 5)} />
+      )}
     </ScrollView>
   );
 }
