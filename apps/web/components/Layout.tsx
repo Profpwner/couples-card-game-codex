@@ -78,7 +78,10 @@ export default function Layout({ children }: LayoutProps) {
           <a href="/proxy-demo" aria-label="Open Proxy Demo" aria-current={path === '/proxy-demo' ? 'page' : undefined} style={{ marginLeft: 12 }}>Proxy Demo</a>
           <a href="/onboard" aria-label="Creator Onboarding" aria-current={path === '/onboard' ? 'page' : undefined} style={{ marginLeft: 12 }}>Onboard</a>
           <a href="/analytics" aria-label="View Analytics" aria-current={path === '/analytics' ? 'page' : undefined} style={{ marginLeft: 12 }}>Analytics</a>
-          <button aria-label="Open keyboard shortcuts help" title="Keyboard shortcuts (?)" style={{ marginLeft: 12 }} onClick={() => setShowHelp(true)}>?</button>
+          <button aria-label="Open keyboard shortcuts help" title="Keyboard shortcuts (?)" style={{ marginLeft: 12, display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={() => setShowHelp(true)}>
+            <span aria-hidden>❓</span>
+            <span>Help</span>
+          </button>
           <span style={{ marginLeft: 16 }} />
           {isAuthenticated ? (
             <>
@@ -97,6 +100,9 @@ export default function Layout({ children }: LayoutProps) {
       <main id="main-content" tabIndex={-1}>{children}</main>
       <BackToTop />
       <KeyboardShortcutsHelp visible={showHelp} onClose={() => setShowHelp(false)} />
+      <footer style={{ marginTop: 24, color: '#666' }}>
+        <a href="#" onClick={(e) => { e.preventDefault(); setShowHelp(true); }}>Keyboard shortcuts</a>
+      </footer>
     </div>
   );
 }

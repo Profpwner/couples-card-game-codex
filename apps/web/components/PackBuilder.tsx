@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { submitPackViaProxy } from '../lib/proxyClient';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import { toast } from 'react-hot-toast';
 
 interface Card {
   id: string;
@@ -105,6 +106,7 @@ export default function PackBuilder() {
         });
         if (!res.ok) throw new Error('Autosave failed');
         setStatus('Saved');
+        toast.success('Saved');
       } catch (e: any) {
         setSaveError(e.message || 'Autosave failed');
         setStatus(`Save failed: ${e.message || ''}`.trim());
@@ -198,6 +200,7 @@ export default function PackBuilder() {
                       if (!res.ok) throw new Error('Add failed');
                       skipNextAutosaveRef.current = true;
                       setStatus('Saved');
+                      toast.success('Card added');
                     } catch (e: any) {
                       setSaveError(e.message || 'Add failed');
                       setStatus(`Save failed: ${e.message || ''}`.trim());
@@ -263,6 +266,7 @@ export default function PackBuilder() {
                                     // Avoid immediate autosave PUT
                                     skipNextAutosaveRef.current = true;
                                     setStatus('Saved');
+                                    toast.success('Card updated');
                                   } catch (e: any) {
                                     setSaveError(e.message || 'Patch failed');
                                     setStatus(`Save failed: ${e.message || ''}`.trim());
@@ -306,6 +310,7 @@ export default function PackBuilder() {
                                         if (!res.ok) throw new Error('Delete failed');
                                         skipNextAutosaveRef.current = true;
                                         setStatus('Saved');
+                                        toast.success('Card deleted');
                                       } catch (e: any) {
                                         setSaveError(e.message || 'Delete failed');
                                         setStatus(`Save failed: ${e.message || ''}`.trim());
@@ -346,9 +351,11 @@ export default function PackBuilder() {
               });
               if (!res.ok) throw new Error('Save failed');
               setStatus('Saved');
+              toast.success('Saved');
               setSaveError(null);
             } catch (e: any) {
               setStatus(`Save failed: ${e.message}`);
+              toast.error(`Save failed: ${e.message}`);
               setSaveError(e.message || 'Save failed');
             }
           }}

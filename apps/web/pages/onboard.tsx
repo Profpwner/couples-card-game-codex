@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import Layout from '../components/Layout';
 import { RequireAuth, useAuth } from '../components/AuthContext';
 import { useRouter } from 'next/router';
@@ -55,9 +56,11 @@ function OnboardForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Onboarding failed');
       setStatus('Onboarding successful');
+      toast.success('Onboarding successful');
       setTimeout(() => router.replace('/dashboard'), 800);
     } catch (e: any) {
       setStatus(`Failed: ${e.message}`);
+      toast.error(`Onboarding failed: ${e.message}`);
     }
   };
 
