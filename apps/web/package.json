@@ -1,0 +1,41 @@
+{
+  "name": "web-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "test": "jest --config ./jest.config.js --passWithNoTests",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-beautiful-dnd": "latest",
+    "axios": "^1.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/react-beautiful-dnd": "latest",
+    "@types/jest": "^29.2.3",
+    "@storybook/react": "latest",
+    "@storybook/addon-a11y": "latest",
+    "@storybook/testing-library": "latest",
+    "babel-loader": "latest",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "@testing-library/react": "latest",
+    "@testing-library/jest-dom": "latest",
+    "jest-environment-jsdom": "^29.0.0",
+    "cypress": "latest",
+    "typescript": "latest"
+  }
+}
