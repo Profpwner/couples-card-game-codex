@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import ThemeToggle from './ThemeToggle';
+import BackToTop from './BackToTop';
 
 interface LayoutProps {
   children: ReactNode;
@@ -7,6 +9,22 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const { isAuthenticated, user, logout } = useAuth();
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || (target as any).isContentEditable)) return;
+      if (e.key === '/') {
+        const el = document.querySelector<HTMLElement>('[data-key-focus="search"]');
+        if (el) { e.preventDefault(); el.focus(); }
+      }
+      if (e.altKey && e.shiftKey && (e.key.toLowerCase() === 'n')) {
+        const nav = document.getElementById('primary-nav');
+        if (nav) { (nav as HTMLElement).focus(); }
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   return (
     <div style={{ padding: '1rem', fontFamily: 'sans-serif' }} data-theme="light">
       <a
@@ -44,6 +62,7 @@ export default function Layout({ children }: LayoutProps) {
                 Signed in as {user?.userId} {user?.isCreator ? '(Creator)' : ''}
               </span>
               <button style={{ marginLeft: 12 }} onClick={logout}>Logout</button>
+              <ThemeToggle />
             </>
           ) : (
             <a href="/login">Login</a>
@@ -51,6 +70,7 @@ export default function Layout({ children }: LayoutProps) {
         </nav>
       </header>
       <main id="main-content" tabIndex={-1}>{children}</main>
+      <BackToTop />
     </div>
   );
 }

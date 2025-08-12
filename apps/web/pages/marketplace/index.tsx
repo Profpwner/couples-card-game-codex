@@ -42,7 +42,7 @@ export default function MarketplaceListPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
         <h1>Marketplace</h1>
         <div>
-          <input placeholder="Search packs" value={q} onChange={e => setQ(e.target.value)} />
+          <input placeholder="Search packs" aria-label="Search packs" data-key-focus="search" value={q} onChange={e => setQ(e.target.value)} />
           <select value={sort} onChange={e => setSort(e.target.value as any)} style={{ marginLeft: 8 }}>
             <option value="newest">Newest</option>
             <option value="title">Title</option>
@@ -64,4 +64,3 @@ export default function MarketplaceListPage() {
     </Layout>
   );
 }
-
