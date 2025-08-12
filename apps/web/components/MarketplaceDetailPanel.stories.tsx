@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import MarketplaceDetailPanel from './MarketplaceDetailPanel';
 import type { Review } from './ReviewItem';
+import ToastButton from './ToastButton';
 
 const meta: Meta<typeof MarketplaceDetailPanel> = {
   title: 'Marketplace/DetailPanel',
@@ -43,4 +44,19 @@ export const Paginated: Story = {
     ...Default.args,
     initialVisible: 3,
   },
+};
+
+
+export const WithToastButtons = {
+  args: { ...Default.args },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: 12 }}>
+        <ToastButton kind="success" label="Show success" message="Action succeeded" />
+        <span style={{ marginLeft: 8 }} />
+        <ToastButton kind="error" label="Show error" message="Action failed" />
+      </div>
+      <MarketplaceDetailPanel {...args} />
+    </div>
+  ),
 };

@@ -3,6 +3,7 @@ import React from 'react';
 import PackBuilder from './PackBuilder';
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, userEvent, screen } from '@storybook/testing-library';
+import ToastButton from './ToastButton';
 
 const meta: Meta<typeof PackBuilder> = {
   title: 'Creator/PackBuilder',
@@ -52,4 +53,18 @@ export const WithPackIdAndTitle: Story = {
     await userEvent.type(packInput, 'demo-pack');
     await userEvent.type(titleInput, 'My Demo Pack');
   },
+};
+
+
+export const WithToasts = {
+  render: () => (
+    <div>
+      <div style={{ marginBottom: 12 }}>
+        <ToastButton kind="success" label="Success toast" message="Saved!" />
+        <span style={{ marginLeft: 8 }} />
+        <ToastButton kind="error" label="Error toast" message="Something went wrong" />
+      </div>
+      <PackBuilder />
+    </div>
+  ),
 };

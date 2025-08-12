@@ -25,12 +25,14 @@ describe('Toasts for PackBuilder and Onboarding', () => {
     cy.contains('button', 'Complete Onboarding').click();
     cy.wait('@onboardPost');
     cy.contains('Onboarding successful').should('exist');
+    cy.get('[role="status"]').contains(/Onboarding successful/i);
 
     // Failure path
     cy.intercept('POST', '/api/creator/onboard', { statusCode: 500, body: { error: 'boom' } }).as('onboardFail');
     cy.contains('button', 'Complete Onboarding').click();
     cy.wait('@onboardFail');
     cy.contains(/Onboarding failed/i).should('exist');
+    cy.get('[role="status"]').contains(/Onboarding failed/i);
   });
 });
 
