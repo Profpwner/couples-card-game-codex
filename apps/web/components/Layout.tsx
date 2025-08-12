@@ -8,7 +8,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const { isAuthenticated, user, logout } = useAuth();
   return (
-    <div style={{ padding: '1rem', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '1rem', fontFamily: 'sans-serif' }} data-theme="light">
       <a
         href="#main-content"
         style={{
@@ -21,7 +21,18 @@ export default function Layout({ children }: LayoutProps) {
         Skip to content
       </a>
       <header style={{ marginBottom: '2rem' }}>
-        <nav aria-label="Primary">
+        <a
+          href="#primary-nav"
+          style={{
+            position: 'absolute', left: 8, top: 48, background: '#fff', color: '#0070f3',
+            padding: '6px 10px', borderRadius: 4, transform: 'translateY(-200%)',
+          }}
+          onFocus={(e) => { (e.currentTarget.style as any).transform = 'none'; }}
+          onBlur={(e) => { (e.currentTarget.style as any).transform = 'translateY(-200%)'; }}
+        >
+          Skip to navigation
+        </a>
+        <nav id="primary-nav" aria-label="Primary">
           <a href="/dashboard" aria-label="Go to Dashboard">Dashboard</a>
           <a href="/proxy-demo" aria-label="Open Proxy Demo" style={{ marginLeft: 12 }}>Proxy Demo</a>
           <a href="/onboard" aria-label="Creator Onboarding" style={{ marginLeft: 12 }}>Onboard</a>
