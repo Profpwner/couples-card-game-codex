@@ -21,11 +21,11 @@ export default function Layout({ children }: LayoutProps) {
         Skip to content
       </a>
       <header style={{ marginBottom: '2rem' }}>
-        <nav>
-          <a href="/dashboard">Dashboard</a>
-          <a href="/proxy-demo" style={{ marginLeft: 12 }}>Proxy Demo</a>
-          <a href="/onboard" style={{ marginLeft: 12 }}>Onboard</a>
-          <a href="/analytics" style={{ marginLeft: 12 }}>Analytics</a>
+        <nav aria-label="Primary">
+          <a href="/dashboard" aria-label="Go to Dashboard">Dashboard</a>
+          <a href="/proxy-demo" aria-label="Open Proxy Demo" style={{ marginLeft: 12 }}>Proxy Demo</a>
+          <a href="/onboard" aria-label="Creator Onboarding" style={{ marginLeft: 12 }}>Onboard</a>
+          <a href="/analytics" aria-label="View Analytics" style={{ marginLeft: 12 }}>Analytics</a>
           <span style={{ marginLeft: 16 }} />
           {isAuthenticated ? (
             <>

@@ -4,11 +4,35 @@ html, body {
   font-family: sans-serif;
 }
 
+/* Accessible link color and hover/underline */
 a {
-  color: inherit;
-  text-decoration: none;
+  color: #0b5fff;
+  text-decoration: underline;
+}
+a:hover {
+  text-decoration-thickness: 2px;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Visible focus outlines for keyboard users */
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Improve contrast of nav links/buttons */
+nav a, nav button {
+  color: #0b5fff;
 }

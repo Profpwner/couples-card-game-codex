@@ -33,7 +33,9 @@
   "jest": {
     "preset": "jest-expo",
     "testEnvironment": "jsdom",
-    "setupFiles": ["<rootDir>/jest.rn.setup.stub.js"],
+    "setupFiles": [
+      "<rootDir>/jest.rn.setup.stub.js"
+    ],
     "moduleNameMapper": {
       "^@react-native/polyfills/error-guard$": "<rootDir>/jest.polyfills.stub.js",
       "^react-native/jest/setup$": "<rootDir>/jest.rn.setup.stub.js",
@@ -42,6 +44,8 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(?:.pnpm/)?(jest-)?react-native|(?:.pnpm/)?@react-native|(?:.pnpm/)?react-native-.*|(?:.pnpm/)?@react-navigation|(?:.pnpm/)?@react-native-community|(?:.pnpm/)?expo(nent)?|(?:.pnpm/)?@expo(nent)?/.*|(?:.pnpm/)?expo-modules-core|(?:.pnpm/)?react-native-svg|(?:.pnpm/)?@unimodules/.*|(?:.pnpm/)?@react-native/polyfills)"
     ],
-    "setupFilesAfterEnv": ["@testing-library/jest-native/extend-expect"]
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ]
   }
 }
