@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import ThemeToggle from './ThemeToggle';
 import BackToTop from './BackToTop';
 import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
+import Icon from './Icon';
 
 interface LayoutProps {
   children: ReactNode;
@@ -79,7 +80,7 @@ export default function Layout({ children }: LayoutProps) {
           <a href="/onboard" aria-label="Creator Onboarding" aria-current={path === '/onboard' ? 'page' : undefined} style={{ marginLeft: 12 }}>Onboard</a>
           <a href="/analytics" aria-label="View Analytics" aria-current={path === '/analytics' ? 'page' : undefined} style={{ marginLeft: 12 }}>Analytics</a>
           <button aria-label="Open keyboard shortcuts help" title="Keyboard shortcuts (?)" style={{ marginLeft: 12, display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={() => setShowHelp(true)}>
-            <span aria-hidden>❓</span>
+            <Icon name="help" />
             <span>Help</span>
           </button>
           <span style={{ marginLeft: 16 }} />
@@ -102,7 +103,7 @@ export default function Layout({ children }: LayoutProps) {
       <KeyboardShortcutsHelp visible={showHelp} onClose={() => setShowHelp(false)} />
       <footer style={{ marginTop: 24, color: '#666' }}>
         <a href="#" onClick={(e) => { e.preventDefault(); setShowHelp(true); }}>
-          <span aria-hidden style={{ marginRight: 6 }}>❓</span>
+          <span aria-hidden style={{ marginRight: 6 }}><Icon name="help" /></span>
           Keyboard shortcuts
         </a>
       </footer>

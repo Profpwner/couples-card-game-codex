@@ -76,6 +76,7 @@ export default function PackBuilder() {
           // Avoid immediate autosave PUT after a successful reorder
           skipNextAutosaveRef.current = true;
           setStatus('Saved');
+          toast.success('Order saved');
         } catch (e: any) {
           setSaveError(e.message || 'Reorder failed');
           setStatus(`Save failed: ${e.message || ''}`.trim());
@@ -131,8 +132,10 @@ export default function PackBuilder() {
               setStatus('Submitting...');
               const res = await submitPackViaProxy(packId);
               setStatus(`Submitted (logId: ${res.logId || 'ok'})`);
+              toast.success('Pack submitted');
             } catch (e: any) {
               setStatus(`Submit failed: ${e.message}`);
+              toast.error(`Submit failed: ${e.message}`);
             }
           }}
           disabled={!packId}
