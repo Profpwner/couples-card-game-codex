@@ -25,3 +25,6 @@
  - Web reviews UX: sorting (newest/highest/lowest) and “Load more” pagination on Marketplace Detail
  - Mobile marketplace: add pull-to-refresh to list and sorting toggles (newest/title); detail shows avg rating with stars and disables actions while busy
  - CI: add lint job with pnpm workspace and optional Turbo Remote Cache job (controlled via TURBO_TEAM/TURBO_TOKEN)
+ - Storybook: add PackBuilder interaction stories (AddCardFlow, EditFirstCardFlow, WithPackIdAndTitle); add ReviewsList + stories and FollowButton stories for disabled state
+ - Web marketplace: add reviews histogram (5→1 distribution) and a success toast after posting a review
+ - Mobile marketplace: add Clear search button and styled pill toggles for sort indicators
