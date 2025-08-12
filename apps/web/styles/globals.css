@@ -1,3 +1,18 @@
+/* Theme variables */
+:root {
+  --focus-ring-color: #005fcc;          /* light theme focus ring */
+  --link-color: #0b5fff;                /* light theme link color */
+  --link-hover-color: #0847b8;          /* light theme hover */
+  --link-active-color: #062f7a;         /* light theme active */
+}
+
+[data-theme="dark"] {
+  --focus-ring-color: #9cc9ff;          /* lighter ring on dark */
+  --link-color: #7ab0ff;                /* accessible on dark bg */
+  --link-hover-color: #a5c6ff;
+  --link-active-color: #cfe0ff;
+}
+
 html, body {
   padding: 0;
   margin: 0;
@@ -36,20 +51,6 @@ a:focus-visible {
 /* Improve contrast of nav links/buttons */
 nav a, nav button {
   color: var(--link-color);
-/* Theme variables */
-:root {
-  --focus-ring-color: #005fcc;          /* light theme focus ring */
-  --link-color: #0b5fff;                /* light theme link color */
-  --link-hover-color: #0847b8;          /* light theme hover */
-  --link-active-color: #062f7a;         /* light theme active */
-}
-
-[data-theme="dark"] {
-  --focus-ring-color: #9cc9ff;          /* lighter ring on dark */
-  --link-color: #7ab0ff;                /* accessible on dark bg */
-  --link-hover-color: #a5c6ff;
-  --link-active-color: #cfe0ff;
-}
 }
 nav a:hover, nav a:focus-visible {
   color: var(--link-hover-color);
@@ -57,4 +58,11 @@ nav a:hover, nav a:focus-visible {
 nav a:active {
   color: var(--link-active-color);
 }
+
+/* Extra focus highlight for interactive cards and modal close buttons */
+article[role="button"]:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus-ring-color);
+}
+button[aria-label*="Close"]:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus-ring-color);
 }

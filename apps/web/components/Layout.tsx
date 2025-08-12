@@ -23,7 +23,13 @@ export default function Layout({ children }: LayoutProps) {
       }
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    const onQ = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName==='INPUT' || target.tagName==='TEXTAREA' || (target as any).isContentEditable)) return;
+      if (e.key === '?') { e.preventDefault(); setShowHelp(true); }
+    };
+    window.addEventListener('keydown', onQ);
+    return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('keydown', onQ); };
   }, []);
   return (
     <div style={{ padding: '1rem', fontFamily: 'sans-serif' }} data-theme="light">
