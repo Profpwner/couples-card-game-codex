@@ -1,13 +1,16 @@
 describe('Toasts for PackBuilder and Onboarding', () => {
-  it('shows PackBuilder save toast (autosave)', () => {
+  it('shows PackBuilder save toast (autosave) and auto-dismiss', () => {
     cy.intercept('GET', 'http://localhost:4000/api/auth/me', { statusCode: 200, body: { userId: 'u1', isCreator: true } });
     cy.intercept('GET', '/api/creator/packs/*/cards', { statusCode: 200, body: { cards: [] } });
-    cy.intercept('PUT', '/api/creator/packs/*/cards', { statusCode: 200, body: { ok: true } }).as('putCards');
+    cy.intercept('PUT', '/api/creator/packs/*/cards', { statusCode: 200, body: { ok: true }, delayMs: 300 }).as('putCards');
+    cy.clock();
 
     cy.visit('/dashboard');
     cy.get('input[aria-label="Pack ID"]').clear().type('p-e2e');
     cy.wait('@putCards');
     cy.contains('Saved').should('exist');
+    cy.tick(5000);
+    cy.contains('Saved').should('not.exist');
   });
 
   it('shows onboarding success and failure toasts', () => {
