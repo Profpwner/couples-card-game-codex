@@ -118,10 +118,10 @@ export default function PackBuilder() {
   return (
     <div>
       <div style={{ marginBottom: '1rem' }}>
-        <label>Pack ID:&nbsp;</label>
-        <input value={packId} onChange={e => setPackId(e.target.value)} placeholder="e.g. p1" />
-        <label style={{ marginLeft: 12 }}>Title:&nbsp;</label>
-        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="New pack title" />
+        <label htmlFor="pack-id-input">Pack ID:&nbsp;</label>
+        <input id="pack-id-input" aria-label="Pack ID" value={packId} onChange={e => setPackId(e.target.value)} placeholder="e.g. p1" />
+        <label htmlFor="pack-title-input" style={{ marginLeft: 12 }}>Title:&nbsp;</label>
+        <input id="pack-title-input" aria-label="Pack title" value={title} onChange={e => setTitle(e.target.value)} placeholder="New pack title" />
         <button
           style={{ marginLeft: 8 }}
           onClick={async () => {
@@ -161,10 +161,10 @@ export default function PackBuilder() {
           Create Pack
         </button>
       </div>
-      <button onClick={() => { setNewCardText(''); setShowModal(true); }}>Add Card</button>
+      <button aria-label="Add Card" onClick={() => { setNewCardText(''); setShowModal(true); }}>Add Card</button>
       {showModal && (
-        <div style={{ border: '1px solid #ccc', padding: '1rem', margin: '1rem 0' }}>
-          <p>Add a new card</p>
+        <div role="dialog" aria-modal="true" aria-labelledby="add-card-title" style={{ border: '1px solid #ccc', padding: '1rem', margin: '1rem 0' }}>
+          <p id="add-card-title">Add a new card</p>
           <input
             aria-label="New card text"
             placeholder="Type card text"
@@ -173,7 +173,7 @@ export default function PackBuilder() {
             style={{ width: '100%', marginBottom: 8 }}
           />
           <div>
-            <button
+            <button aria-label="Confirm add card"
               onClick={() => {
                 if (!newCardText.trim()) return;
                 const content = newCardText.trim();
@@ -211,7 +211,7 @@ export default function PackBuilder() {
             >
               Add
             </button>
-            <button style={{ marginLeft: 8 }} onClick={() => setShowModal(false)}>Close</button>
+            <button aria-label="Close add card dialog" style={{ marginLeft: 8 }} onClick={() => setShowModal(false)}>Close</button>
           </div>
         </div>
       )}
@@ -359,7 +359,7 @@ export default function PackBuilder() {
         {isSaving && <span style={{ marginLeft: 8, color: '#888' }}>Saving...</span>}
         {saveError && <span style={{ marginLeft: 8, color: 'crimson' }}>Error: {saveError}</span>}
       </div>
-      {status && <p style={{ marginTop: 12, color: '#555' }}>{status}</p>}
+      {status && <p role="status" aria-live="polite" style={{ marginTop: 12, color: '#555' }}>{status}</p>}
     </div>
   );
 }

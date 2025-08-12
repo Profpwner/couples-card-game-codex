@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import MarketplaceCard from './MarketplaceCard';
 
 export interface PackSummary { pack_id: string; title: string }
 
@@ -25,15 +26,12 @@ export default function MarketplaceListPanel({ packs }: { packs: PackSummary[] }
           </select>
         </div>
       </div>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
         {filtered.map(p => (
-          <li key={p.pack_id} style={{ padding: 8, borderBottom: '1px solid #eee' }}>
-            {p.title}
-          </li>
+          <MarketplaceCard key={p.pack_id} title={p.title} averageRating={0} reviewsCount={0} />
         ))}
-      </ul>
+      </div>
       {filtered.length === 0 && <p>No packs found.</p>}
     </div>
   );
 }
-

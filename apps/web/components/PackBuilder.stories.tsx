@@ -13,6 +13,7 @@ const meta: Meta<typeof PackBuilder> = {
         component: 'Creator pack builder demo with drag-and-drop, partial PATCHes, and submit stub.',
       },
     },
+    a11y: { disable: false },
   },
 };
 export default meta;

@@ -128,7 +128,7 @@ export default function MarketplaceDetailPage() {
           </div>
           <ReviewsHistogram ratings={reviews.map(r => r.rating)} />
           {toast && (
-            <div style={{ position: 'fixed', right: 16, bottom: 16, background: '#333', color: '#fff', padding: '8px 12px', borderRadius: 6 }}>
+            <div role="status" aria-live="polite" style={{ position: 'fixed', right: 16, bottom: 16, background: '#333', color: '#fff', padding: '8px 12px', borderRadius: 6 }}>
               {toast}
             </div>
           )}
