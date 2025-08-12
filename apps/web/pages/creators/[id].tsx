@@ -29,6 +29,7 @@ function CreatorProfile() {
   const [err, setErr] = useState('');
   const [hist, setHist] = useState<{ counts: Record<number, number> } | null>(null);
   const [trend, setTrend] = useState<{ labels: string[]; followers: number[] } | null>(null);
+  const [days, setDays] = useState<number>(7);
 
   useEffect(() => {
     const run = async () => {
@@ -39,7 +40,7 @@ function CreatorProfile() {
         // fetch histogram and follows trend
         const [h, tr] = await Promise.all([
           fetch(`/api/creator/creators/${id}/reviews/summary`).then(r => r.json()).catch(() => null),
-          fetch(`/api/creator/creators/${id}/follows/trends`).then(r => r.json()).catch(() => null),
+          fetch(`/api/creator/creators/${id}/follows/trends?days=${days}`).then(r => r.json()).catch(() => null),
         ]);
         if (h) setHist(h);
         if (tr) setTrend(tr);
@@ -75,6 +76,12 @@ function CreatorProfile() {
         <div>
           <h2>{profile.display_name}</h2>
           {profile.bio && <p style={{ maxWidth: 640 }}>{profile.bio}</p>}
+
+          <div style={{ margin: '6px 0', color: '#444' }}>
+            <strong>Average:</strong> {profile.avg_rating?.toFixed ? profile.avg_rating.toFixed(1) : profile.avg_rating} ({(hist ? Object.values(hist.counts).reduce((a as number,b as number)=>a+b,0) : 0) as any} ratings)
+          </div>
+          <label>Followers range: <select value={days} onChange={e => setDays(parseInt(e.target.value,10))}><option value={7}>7d</option><option value={14}>14d</option><option value={30}>30d</option></select></label>
+
           <div style={{ margin: '8px 0' }}>
             <strong>Followers:</strong> {profile.followers} &nbsp;|&nbsp; <strong>Avg Rating:</strong> <Stars rating={profile.avg_rating} />
           </div>

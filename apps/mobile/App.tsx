@@ -5,6 +5,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import MarketplaceList from './src/screens/MarketplaceList';
 import MarketplaceDetail from './src/screens/MarketplaceDetail';
 import PurchaseScreen from './src/screens/PurchaseScreen';
+import ReceiptScreen from './src/screens/ReceiptScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="MarketplaceList" component={MarketplaceList} />
         <Stack.Screen name="MarketplaceDetail" component={MarketplaceDetail} />
         <Stack.Screen name="Purchase" component={PurchaseScreen} />
+        <Stack.Screen name="PurchaseReceipt" component={ReceiptScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
