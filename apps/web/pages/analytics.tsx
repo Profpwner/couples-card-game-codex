@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { RequireAuth, useAuth } from '../components/AuthContext';
 import AnalyticsCards, { Sales, Engagement } from '../components/AnalyticsCards';
+import AnalyticsCharts from '../components/AnalyticsCharts';
+import { appFetch } from '../lib/appFetch';
 
 
 export default function AnalyticsPage() {
@@ -24,8 +26,8 @@ function CreatorAnalytics() {
     const run = async () => {
       try {
         const [s, e] = await Promise.all([
-          fetch(`/api/creator/analytics/sales?userId=${user?.userId}`).then(r => r.json()),
-          fetch(`/api/creator/analytics/engagement?userId=${user?.userId}`).then(r => r.json()),
+          appFetch(`/api/creator/analytics/sales?userId=${user?.userId}`).then(r => r.json()),
+          appFetch(`/api/creator/analytics/engagement?userId=${user?.userId}`).then(r => r.json()),
         ]);
         if (s.error) throw new Error(s.error);
         if (e.error) throw new Error(e.error);
@@ -40,9 +42,14 @@ function CreatorAnalytics() {
 
   return (
     <div>
-      <h1>Creator Analytics (Stub)</h1>
+      <h1>Creator Analytics</h1>
       {err && <p style={{ color: 'crimson' }}>{err}</p>}
       <AnalyticsCards sales={sales} eng={eng} />
+      {sales && eng && (
+        <div style={{ marginTop: 24 }}>
+          <AnalyticsCharts packsSold={sales.packsSold} revenueCents={sales.revenueCents} readers={eng.readers} avgSessionSec={eng.avgSessionSec} />
+        </div>
+      )}
     </div>
   );
 }

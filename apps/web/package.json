@@ -19,7 +19,9 @@
     "react-dom": "18.2.0",
     "axios": "^1.7.2",
     "@hello-pangea/dnd": "16.5.0",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "react-chartjs-2": "^5.2.0",
+    "chart.js": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "20.14.10",
