@@ -6,7 +6,7 @@ const router = Router();
 // Returns stubbed sales metrics for a creator
 router.get('/analytics/sales', async (req, res) => {
   const userId = (req as any).user?.userId || (req.query.userId as string | undefined);
-  if (!userId) return res.status(400).json({ error: 'userId (JWT or query) required' });
+  if (!userId) return res.status(400).json({ error: 'userId (JWT || query) required' });
   try {
     // Example aggregate; in real impl, compute from orders table
     const result = await pool.query('SELECT COUNT(*)::int as packs_sold, 12345::int as revenue_cents');
@@ -21,7 +21,7 @@ router.get('/analytics/sales', async (req, res) => {
 // Returns stubbed engagement metrics for a creator
 router.get('/analytics/engagement', async (req, res) => {
   const userId = (req as any).user?.userId || (req.query.userId as string | undefined);
-  if (!userId) return res.status(400).json({ error: 'userId (JWT or query) required' });
+  if (!userId) return res.status(400).json({ error: 'userId (JWT || query) required' });
   try {
     // Example stub: readers and avg session length
     res.json({ userId, readers: 256, avgSessionSec: 312 });
@@ -38,13 +38,14 @@ export default router;
 // Weekly trend stub: last 7 days sales and readers
 router.get('/analytics/trends', async (req, res) => {
   const userId = (req as any).user?.userId || (req.query.userId as string | undefined);
-  if (!userId) return res.status(400).json({ error: 'userId (JWT or query) required' });
+  if (!userId) return res.status(400).json({ error: 'userId (JWT || query) required' });
   try {
     const today = new Date();
+    const days = Math.max(1, Math.min(30, parseInt((req.query.days as string) || '7', 10) || 7));
     const labels: string[] = [];
     const sales: number[] = [];
     const readers: number[] = [];
-    for (let i = 6; i >= 0; i--) {
+    for (let i = days - 1; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
       labels.push(`${d.getMonth()+1}/${d.getDate()}`);

@@ -11,6 +11,7 @@ import socialRoutes from './routes/social';
 import marketplaceRoutes from './routes/marketplace';
 import { authenticate } from './lib/auth';
 import profileRoutes from './routes/profile';
+import insightsRoutes from './routes/creator-insights';
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 const app = express();
@@ -39,6 +40,7 @@ app.use('/', socialRoutes);
 
 // Creator public profile endpoint
 app.use('/', profileRoutes);
+app.use('/', insightsRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
