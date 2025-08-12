@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { submitPackViaProxy } from '../lib/proxyClient';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { toast } from 'react-hot-toast';
+import { appFetch } from '../lib/appFetch';
 
 interface Card {
   id: string;
@@ -35,7 +36,7 @@ export default function PackBuilder() {
     const load = async () => {
       if (!packId) return;
       try {
-        const res = await fetch(`/api/creator/packs/${packId}/cards`, { credentials: 'include' });
+        const res = await appFetch(`/api/creator/packs/${packId}/cards`, { credentials: 'include' });
         if (!res.ok) return;
         const data = await res.json();
         if (!didCancel && Array.isArray(data.cards)) {
@@ -99,13 +100,13 @@ export default function PackBuilder() {
         setIsSaving(true);
         setSaveError(null);
         const payload = { cards: cards.map(c => c.content) };
-        const res = await fetch(`/api/creator/packs/${packId}/cards`, {
+        const res = await appFetch(`/api/creator/packs/${packId}/cards`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error('Autosave failed');
+        // appFetch throws on !ok
         setStatus('Saved');
         toast.success('Saved');
       } catch (e: any) {
@@ -194,13 +195,13 @@ export default function PackBuilder() {
                     try {
                       setIsSaving(true);
                       setSaveError(null);
-                      const res = await fetch(`/api/creator/packs/${packId}/cards`, {
+                      const res = await appFetch(`/api/creator/packs/${packId}/cards`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         credentials: 'include',
                         body: JSON.stringify({ index, content }),
                       });
-                      if (!res.ok) throw new Error('Add failed');
+                      // appFetch throws on !ok
                       skipNextAutosaveRef.current = true;
                       setStatus('Saved');
                       toast.success('Card added');
@@ -259,13 +260,13 @@ export default function PackBuilder() {
                                   try {
                                     setIsSaving(true);
                                     setSaveError(null);
-                                    const res = await fetch(`/api/creator/packs/${packId}/cards`, {
+                                    const res = await appFetch(`/api/creator/packs/${packId}/cards`, {
                                       method: 'PATCH',
                                       headers: { 'Content-Type': 'application/json' },
                                       credentials: 'include',
                                       body: JSON.stringify({ index: idx, content: editingText }),
                                     });
-                                    if (!res.ok) throw new Error('Patch failed');
+                                    // appFetch throws on !ok
                                     // Avoid immediate autosave PUT
                                     skipNextAutosaveRef.current = true;
                                     setStatus('Saved');
@@ -309,8 +310,8 @@ export default function PackBuilder() {
                                         setIsSaving(true);
                                         setSaveError(null);
                                         const url = `/api/creator/packs/${packId}/cards?index=${idx}`;
-                                        const res = await fetch(url, { method: 'DELETE', credentials: 'include' });
-                                        if (!res.ok) throw new Error('Delete failed');
+                                        const res = await appFetch(url, { method: 'DELETE', credentials: 'include' });
+                                        // appFetch throws on !ok
                                         skipNextAutosaveRef.current = true;
                                         setStatus('Saved');
                                         toast.success('Card deleted');
@@ -346,13 +347,13 @@ export default function PackBuilder() {
             try {
               setStatus('Saving...');
               const payload = { cards: cards.map(c => c.content) };
-              const res = await fetch(`/api/creator/packs/${packId}/cards`, {
+              const res = await appFetch(`/api/creator/packs/${packId}/cards`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify(payload),
               });
-              if (!res.ok) throw new Error('Save failed');
+              // appFetch throws on !ok
               setStatus('Saved');
               toast.success('Saved');
               setSaveError(null);

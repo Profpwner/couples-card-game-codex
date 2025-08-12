@@ -1,6 +1,14 @@
 import React from 'react';
 
 export default function KeyboardShortcutsHelp({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+  React.useEffect(() => {
+    if (!visible) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [visible, onClose]);
   if (!visible) return null;
   return (
     <div role="dialog" aria-modal="true" aria-labelledby="kbd-help-title"
@@ -22,4 +30,3 @@ export default function KeyboardShortcutsHelp({ visible, onClose }: { visible: b
     </div>
   );
 }
-
