@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { useAuth, RequireAuth } from '../../components/AuthContext';
 import Stars from '../../components/Stars';
 import { fetchCreatorProfileViaProxy, getFollowStatusViaProxy, followCreatorViaProxy, unfollowCreatorViaProxy } from '../../lib/proxyClient';
+import { appFetch } from '../../lib/appFetch';
 import ReviewsHistogram from '../../components/ReviewsHistogram';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
@@ -39,8 +40,8 @@ function CreatorProfile() {
         setProfile(p);
         // fetch histogram and follows trend
         const [h, tr] = await Promise.all([
-          fetch(`/api/creator/creators/${id}/reviews/summary`).then(r => r.json()).catch(() => null),
-          fetch(`/api/creator/creators/${id}/follows/trends?days=${days}`).then(r => r.json()).catch(() => null),
+          appFetch(`/api/creator/creators/${id}/reviews/summary`).then(r => r.json()).catch(() => null),
+          appFetch(`/api/creator/creators/${id}/follows/trends?days=${days}`).then(r => r.json()).catch(() => null),
         ]);
         if (h) setHist(h);
         if (tr) setTrend(tr);
