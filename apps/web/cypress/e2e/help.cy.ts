@@ -9,6 +9,8 @@ describe('Help overlay opens via keyboard and buttons', () => {
     cy.visit('/');
     cy.contains('button', /help/i).click();
     cy.contains('Keyboard Shortcuts').should('exist');
+    cy.contains('button', '✕').click();
+    cy.contains('Keyboard Shortcuts').should('not.exist');
   });
 
   it('opens via footer link', () => {
@@ -17,4 +19,3 @@ describe('Help overlay opens via keyboard and buttons', () => {
     cy.contains('Keyboard Shortcuts').should('exist');
   });
 });
-

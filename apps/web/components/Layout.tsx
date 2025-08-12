@@ -101,7 +101,10 @@ export default function Layout({ children }: LayoutProps) {
       <BackToTop />
       <KeyboardShortcutsHelp visible={showHelp} onClose={() => setShowHelp(false)} />
       <footer style={{ marginTop: 24, color: '#666' }}>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowHelp(true); }}>Keyboard shortcuts</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setShowHelp(true); }}>
+          <span aria-hidden style={{ marginRight: 6 }}>❓</span>
+          Keyboard shortcuts
+        </a>
       </footer>
     </div>
   );
