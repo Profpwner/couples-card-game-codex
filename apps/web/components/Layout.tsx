@@ -9,6 +9,17 @@ export default function Layout({ children }: LayoutProps) {
   const { isAuthenticated, user, logout } = useAuth();
   return (
     <div style={{ padding: '1rem', fontFamily: 'sans-serif' }}>
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute', left: 8, top: 8, background: '#fff', color: '#0070f3',
+          padding: '6px 10px', borderRadius: 4, transform: 'translateY(-200%)',
+        }}
+        onFocus={(e) => { (e.currentTarget.style as any).transform = 'none'; }}
+        onBlur={(e) => { (e.currentTarget.style as any).transform = 'translateY(-200%)'; }}
+      >
+        Skip to content
+      </a>
       <header style={{ marginBottom: '2rem' }}>
         <nav>
           <a href="/dashboard">Dashboard</a>
@@ -28,7 +39,7 @@ export default function Layout({ children }: LayoutProps) {
           )}
         </nav>
       </header>
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
     </div>
   );
 }

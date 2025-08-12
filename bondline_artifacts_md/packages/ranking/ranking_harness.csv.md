@@ -1,0 +1,1 @@
+```csv\nproduct_id,completion_rate,repeat_use_30d,helpful_ratio,refund_rate,flag_rate,recency_days\np1,0.78,0.42,0.65,0.02,0.001,3\np2,0.55,0.30,0.58,0.03,0.002,10\np3,0.66,0.25,0.60,0.01,0.001,1\n```\n

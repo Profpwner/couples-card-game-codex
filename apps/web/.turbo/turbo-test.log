@@ -1,0 +1,46 @@
+
+> web-app@0.1.0 test /Users/abrahamkang/Projects/couples-card-game-codex/apps/web
+> jest --config ./jest.config.js --passWithNoTests
+
+(node:83594) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/Layout.test.tsx
+(node:83593) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/analytics.test.tsx
+PASS __tests__/api.test.ts
+PASS __tests__/api-proxy.test.ts
+PASS __tests__/marketplace-proxy.test.ts
+(node:83589) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:83588) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:83584) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/packbuilder-save.test.tsx (5.055 s)
+PASS __tests__/packbuilder-create.test.tsx (5.523 s)
+PASS __tests__/packbuilder-submit.test.tsx (5.576 s)
+(node:83586) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:83592) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/PackBuilder.test.tsx (5.155 s)
+(node:83590) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/packbuilder-patch.test.tsx (5.265 s)
+(node:83587) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:83585) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/packbuilder-autosave.test.tsx (5.457 s)
+PASS __tests__/packbuilder-post-delete.test.tsx (5.393 s)
+PASS __tests__/packbuilder-crud.test.tsx (5.432 s)
+(node:83591) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/onboard.test.tsx (5.304 s)
+
+Test Suites: 14 passed, 14 total
+Tests:       20 passed, 20 total
+Snapshots:   0 total
+Time:        8.123 s
+Ran all test suites.

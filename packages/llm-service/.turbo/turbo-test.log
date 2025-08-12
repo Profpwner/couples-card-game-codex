@@ -1,0 +1,16 @@
+
+> llm-service@0.1.0 test /Users/abrahamkang/Projects/couples-card-game-codex/packages/llm-service
+> jest --config ./jest.config.js --passWithNoTests
+
+PASS src/index.test.ts
+  LLM service
+    ✓ returns a string from ideationPrompt (6 ms)
+    ✓ returns a string from structuringPrompt
+    ✓ returns a string from contentGenerationPrompt (1 ms)
+    ✓ returns a string from refinementPrompt
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        1.41 s, estimated 2 s
+Ran all test suites.

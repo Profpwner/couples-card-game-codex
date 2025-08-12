@@ -4,6 +4,7 @@ import { ReviewItem } from './ReviewItem';
 const meta: Meta<typeof ReviewItem> = {
   title: 'Marketplace/ReviewItem',
   component: ReviewItem,
+  parameters: { a11y: { disable: false } },
 };
 export default meta;
 type Story = StoryObj<typeof ReviewItem>;
@@ -19,4 +20,3 @@ export const Basic: Story = {
     },
   },
 };
-

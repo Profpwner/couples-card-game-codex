@@ -1,0 +1,33 @@
+# Monorepo Layout (Reference)
+
+```
+/apps
+  /mobile
+  /web
+  /reviewer-console
+/services
+  /api
+  /entitlements
+  /payouts
+/packages
+  /schemas
+  /protocols
+  /crypto
+  /ui
+  /audio
+  /haptics
+  /i18n
+  /analytics
+  /ranking
+  /testutils
+/assets
+  /audio/vo_en
+  /haptics
+  /bundles
+/docs
+  /openapi.yaml.md
+  /asyncapi.yaml.md
+  /security
+  /llm
+  /policies
+```

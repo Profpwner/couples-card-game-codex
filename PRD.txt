@@ -1,0 +1,454 @@
+Of course. Based on our extensive discussions, I have synthesized all the requirements into a comprehensive Product Requirement Specification (PRS) for **Project Connect**. This document details the full functionality for both the web and mobile applications, ensuring a seamless and unified user experience across platforms.
+
+***
+
+# **Project Connect: Product Requirement Specification (PRS)**
+
+**Version:** 1.0
+**Date:** August 8, 2025
+
+## **1.0 Executive Summary & Vision**
+
+### **1.1 Mission**
+To create the world's leading platform for intentional connection by empowering a global community of creators to design and share meaningful, psychologically-grounded interactive experiences that deepen human relationships.
+
+### **1.2 Vision**
+Project Connect will be a two-sided marketplace that transcends the limitations of static, one-size-fits-all connection games. For consumers, it will be a vibrant "App Store for Relationships," offering an ever-growing library of niche, high-quality interactive experiences (`Packs`). For creators, it will be a revolutionary, AI-assisted development platform that democratizes the creation of effective, safe, and marketable connection tools.
+
+### **1.3 Core Differentiator: The AI Co-Pilot**
+Our strategic moat is the **AI Co-Pilot**, a guided, conversational development tool. Unlike competitors who operate closed, expert-led content ecosystems, we empower subject-matter experts, coaches, therapists, and individuals with unique life experiences to become successful creators.[1] The Co-Pilot acts as a scalable quality control mechanism, ensuring all user-generated content (UGC) is built on a foundation of proven psychological principles and sound game design, thereby solving the primary risk that has prevented others from entering this space.[2, 3, 4, 5]
+
+---
+
+## **2.0 System Architecture & Core Technologies**
+
+### **2.1 Dual-Interface Ecosystem**
+The platform will be a synergistic system comprising a web application and a mobile application, with functional parity across both.
+*   **Web Application:** A fully-featured, responsive web app accessible from any modern browser. It will serve as the primary interface for the Creator Suite but will also provide a complete consumer experience (discovery, purchasing, account management).
+*   **Mobile Application:** Native iOS and Android applications providing the complete feature set. The UI will be optimized for touch interaction, discovery, and in-person gameplay, prioritizing an "invisible UI" philosophy that minimizes screen time and encourages real-world connection.[6, 7, 8, 9]
+
+### **2.2 Technology Stack (Proposed)**
+*   **Frontend:** React/Next.js (Web), React Native (Mobile for cross-platform development).
+*   **Backend:** Node.js with a microservices architecture (e.g., Authentication, Creator, Marketplace, Payments, Moderation).
+*   **Database:** PostgreSQL for relational data, Vector Database (e.g., Pinecone) for AI semantic search.
+*   **AI/LLM:** API integration with a state-of-the-art LLM (e.g., GPT-4, Claude 3) for the Co-Pilot.
+*   **Payments:** Stripe Connect for secure, compliant payment processing and automated creator payouts.[10, 11]
+*   **Infrastructure:** Cloud-based (AWS/GCP) for scalability, using services like S3 for asset storage.
+
+### **2.3 Security Foundation: The Digital Vault**
+Security and privacy are core, marketable features.[12, 13]
+*   **Authentication:** Token-based authentication (OAuth2/OIDC) with mandatory Multi-Factor Authentication (MFA) for all users.[14, 15, 16, 17]
+*   **Encryption:** End-to-end encryption (E2EE) for all gameplay session data and private user communications. All data at rest will be encrypted using AES-256. Sensitive credentials will be stored in platform-native secure enclaves (iOS Keychain, Android Keystore).[14, 15, 16]
+*   **Data Minimization:** The platform will adhere to the principle of least privilege, collecting only data essential for functionality, which will be transparently disclosed in a human-readable privacy policy.[18, 19, 20, 21, 22, 23]
+
+---
+
+## **3.0 Data Models & File Formats**
+
+### **3.1 Core Data Models (Simplified Schema)**
+
+| Table Name | Key Fields | Description |
+| :--- | :--- | :--- |
+| **Users** | `user_id` (PK), `email`, `password_hash`, `auth_token`, `profile_image_url`, `created_at`, `is_creator` | Stores all user accounts. |
+| **Creators** | `creator_id` (PK, FK to Users), `display_name`, `bio`, `profile_url`, `payout_details_token`, `tier_level` | Stores public-facing creator information and Stripe Connect token. |
+| **Packs** | `pack_id` (PK), `creator_id` (FK), `title`, `description`, `cover_image_url`, `price`, `status`, `avg_rating`, `category_tags` | Represents a purchasable content pack. |
+| **Cards** | `card_id` (PK), `pack_id` (FK), `card_type`, `content_json`, `level`, `order_in_pack` | Stores individual cards within a pack. |
+| **Purchases** | `purchase_id` (PK), `user_id` (FK), `pack_id` (FK), `purchase_date`, `transaction_id`, `amount_paid` | Logs all pack purchases. |
+| **Reviews** | `review_id` (PK), `user_id` (FK), `pack_id` (FK), `rating` (1-5), `review_text`, `created_at` | Stores user reviews for packs. |
+| **ModerationLog** | `log_id` (PK), `content_id`, `content_type`, `status`, `moderator_id`, `action_taken`, `notes`, `timestamp` | Tracks all content moderation actions for auditing. |
+
+### **3.2 File Formats**
+*   **Card Content (`content_json`):** A flexible JSON object to support rich media.
+    *   Example: `{ "text": "What's a belief you hold?", "image_url": "...", "audio_url": "...", "haptic_pattern": "short_pulse" }`
+*   **Pack Import/Export:** Creators can optionally use a `.zip` archive containing a `pack_data.csv` and an `assets` folder, inspired by platforms like Deckible.[24, 25, 26, 27, 28]
+    *   `pack_data.csv`: Columns for `card_number`, `level`, `card_type`, `text_content`, `image_filename`, etc.
+    *   `assets/`: Folder containing all image (`.jpg`, `.png`), audio (`.mp3`), and video (`.mp4`) files.
+
+---
+
+## **4.0 API Specification & Crypto Handshake**
+
+### **4.1 API Architecture**
+A RESTful API with a microservices architecture will be used. All endpoints will be accessible via both web and mobile clients.
+
+### **4.2 Key API Endpoints**
+
+| Endpoint | Method | Description | Authentication |
+| :--- | :--- | :--- | :--- |
+| `/auth/register` | POST | Creates a new user account. | Public |
+| `/auth/login` | POST | Authenticates a user and returns a JWT. | Public |
+| `/packs` | GET | Fetches published packs (supports search/filter). | Public |
+| `/packs/{id}` | GET | Fetches details for a specific pack. | Public |
+| `/packs/purchase` | POST | Initiates a purchase flow for a pack. | User JWT |
+| `/creator/packs` | GET/POST | Lists or creates a new draft pack for the authenticated creator. | Creator JWT |
+| `/creator/packs/{id}` | PUT | Updates a creator's draft pack. | Creator JWT |
+| `/creator/packs/{id}/submit` | POST | Submits a pack for moderation review. | Creator JWT |
+| `/creator/analytics` | GET | Fetches sales and engagement data for the creator. | Creator JWT |
+| `/moderation/queue` | GET | Fetches the next item for review from the moderation queue. | Moderator JWT |
+| `/moderation/review` | POST | Submits a moderation decision (approve/reject). | Moderator JWT |
+
+### **4.3 Crypto Handshake & Security**
+1.  **Client-Server Communication:** All API communication will be enforced over HTTPS using TLS 1.2+.[16, 17] Certificate Pinning will be implemented in the mobile apps to prevent man-in-the-middle (MITM) attacks.[16]
+2.  **Authentication Flow:**
+    *   User logs in with credentials.
+    *   The `Auth-Service` verifies credentials and issues a short-lived JSON Web Token (JWT) signed with a private key.
+    *   The client stores this JWT securely (Keychain/Keystore).[14, 15, 16]
+    *   For every subsequent API request, the client includes the JWT in the `Authorization: Bearer <token>` header. The API gateway verifies the JWT signature before processing the request.[16, 17]
+
+---
+
+## **5.0 Platform-Wide Features (Web & Mobile)**
+
+### **5.1 User Account Management**
+*   **Registration:** Simple sign-up via Email/Password, Google Sign-In, and Apple Sign-In. Users must agree to Terms of Service and Privacy Policy.[29]
+*   **Login:** Secure login with MFA option.
+*   **Profile Management:** Users can edit their display name, profile picture, and password.
+*   **Privacy Center:** A dedicated section for users to manage their data, view the privacy policy, and request account deletion.[18]
+
+### **5.2 Marketplace & Discovery**
+*   **Home Screen:** Features curated carousels: "Featured," "New & Noteworthy," "Trending," and a personalized "For You" section.
+*   **Search & Filtering:** Robust search by keyword, with filters for category, price, player count, and average rating.
+*   **Ranking Algorithm:** The default sort order ("Relevance") will be a weighted score: `(0.4 * PerformanceScore) + (0.3 * RelevanceScore) + (0.3 * QualityScore)`.
+    *   **PerformanceScore:** Based on sales velocity and conversion rate.
+    *   **RelevanceScore:** Based on keyword matches in title, description, and tags.
+    *   **QualityScore:** Based on average user rating, volume of reviews, and low "card skip rate."
+
+### **5.3 Pack Detail Pages**
+*   **Content:** Displays cover art, title, creator profile link, description, price, user ratings, and reviews.
+*   **Creator Link:** A prominent link to the creator's profile page to build trust and allow users to discover other packs by the same creator.
+
+### **5.4 In-App Purchases & Monetization**
+*   **Model:** One-time purchases for individual `Packs`. No subscriptions for the MVP.
+*   **Platform Fee:** A 30% commission on the net revenue from all pack sales.[30]
+*   **Purchase Flow:** Seamless integration with native in-app purchase systems (Apple App Store/Google Play) and Stripe (Web).[31, 32, 33, 34, 35] The flow must be transparent about pricing and terms.[32, 33, 34, 35]
+
+### **5.5 Community & Social Features**
+*   **Ratings & Reviews:** Users can leave a star rating (1-5) and a written review for any pack they have purchased. All reviews are subject to moderation.
+*   **Following Creators:** Users can "Follow" creators to receive notifications about new releases.
+*   **Social Sharing:** Users can share a link to a pack's store page via native sharing options.[36, 37]
+
+### **5.6 Gamification**
+*   **Connection Streaks:** The app tracks consecutive days a user plays a session, rewarding them with badges.[38, 39, 40, 41, 42, 43]
+*   **Milestone Badges:** Users earn non-competitive badges for achievements like "First Pack Completed," "Deep Diver" (for completing a Level 3 session), etc..[38, 39, 40, 41, 42]
+
+---
+
+## **6.0 Creator-Specific Features (Web & Mobile)**
+
+### **6.1 Creator Onboarding & Profile**
+*   **Onboarding:** A guided flow to convert a user account to a creator account, including agreement to Creator Terms and connection to Stripe for payouts.[11]
+*   **Profile:** A public page showcasing the creator's bio, photo, and a gallery of their published packs.
+
+### **6.2 The Pack Builder & AI Co-Pilot**
+*   **UI:** A visual, card-based editor for adding, editing, and reordering cards. Supports multiple card types (Question, Action, Wildcard) and a level-based structure.[1]
+*   **AI Co-Pilot Flow:** A conversational, multi-step process using prompt chaining.[44, 45, 46, 47, 48]
+    1.  **Ideation:** The Co-Pilot asks Socratic questions to help the creator define their pack's goal, audience, and tone.[49, 50, 51, 52, 53]
+    2.  **Structuring:** The Co-Pilot suggests a structural framework based on psychological models (e.g., escalating self-disclosure, Gottman Method, EFT).[54, 55, 56, 57]
+    3.  **Content Generation:** The Co-Pilot acts as a brainstorming partner, suggesting questions and activities informed by therapeutic modalities like Narrative Therapy or CBT.
+    4.  **Refinement:** The Co-Pilot provides automated feedback on pacing and emotional balance before submission.
+
+### **6.3 Content & Asset Management**
+*   **Media Support:** The builder allows uploading of images (`.jpg`, `.png`) for card backgrounds or content. The architecture will support future integration of audio (`.mp3`) and haptic feedback patterns.[58, 59, 60, 61, 62, 63]
+
+### **6.4 Pricing, Publishing & Version Control**
+*   **Pricing:** Creators set the price for their packs within platform-defined bands (e.g., $1.99 - $19.99).
+*   **Publishing:** A "Submit for Review" button initiates the moderation workflow.
+*   **Version Control:** Creators can update their published packs and submit new versions for review.
+
+### **6.5 Creator Analytics Dashboard**
+*   **Metrics:** Provides real-time data on sales, revenue, downloads, and conversion rates.
+*   **Engagement Insights:** Offers aggregated, anonymized data on which cards are most frequently "favorited" or "skipped" by users, providing a direct feedback loop.[13]
+
+### **6.6 Creator Payout System**
+*   **Logic:** Payouts are calculated quarterly. `Creator Earning = (Gross Revenue - App Store Fees - Payment Processor Fees) * 0.70`.[64, 11, 65, 66, 67]
+*   **Mechanism:** Automated payouts are managed via Stripe Connect to the creator's linked account.[68]
+
+---
+
+## **7.0 Consumer-Specific Features (Web & Mobile)**
+
+### **7.1 Gameplay Interface**
+*   **Design:** A minimalist, distraction-free UI designed to facilitate in-person interaction.[6, 7, 8, 9] High-contrast, legible fonts and thumb-friendly navigation are priorities.[6, 8, 9]
+*   **Modes:**
+    *   **Pass the Phone (MVP):** A single-device mode for local play.
+    *   **Companion Mode (V2):** Allows multiple users to sync their devices to a single game session.
+
+### **7.2 My Library**
+*   A dedicated section where users can access all their purchased `Packs`. Packs can be sorted and filtered.
+
+### **7.3 Session History (`Connection Chronicle`)**
+*   A private log of past gameplay sessions, including the date, pack played, and participants. This creates an emotional investment in the platform and encourages retention.
+
+---
+
+## **8.0 Trust, Safety & Ethical Framework**
+
+### **8.1 Ethical Guidelines & Disclaimers**
+*   **Core Principle:** The platform is a tool for connection, not a substitute for professional therapy. This disclaimer will be prominently displayed in the app, especially for packs in sensitive categories.[69, 70, 71, 72, 73, 74]
+*   **Creator Responsibility:** Creators of sensitive content (e.g., "Trauma Recovery") may be required to verify credentials or complete a platform-provided training module on creating safe, trauma-informed content.[69, 70, 71, 72, 73, 74]
+
+### **8.2 Content Moderation SOPs**
+A multi-layered moderation system is non-negotiable.[75, 76, 77, 78, 79, 80, 81]
+1.  **Automated Pre-Moderation:** All submitted text is scanned by an NLP model for clear violations (hate speech, explicit content, etc.).[77, 79]
+2.  **Mandatory Human-in-the-Loop (HITL) Review:** All packs in "Sensitive Categories" are placed in a queue for manual review by a trained moderator before publication.[82, 83, 84, 85, 10, 86, 87, 28, 88, 89]
+3.  **Reactive Moderation:** Users can easily report packs, reviews, or creator profiles. Reports are prioritized and sent to a human moderation queue.[29, 81]
+
+### **8.3 Creator Terms of Service & Community Guidelines**
+*   All creators must agree to a clear set of guidelines defining prohibited content, intellectual property rights, and consequences for violations.[76, 80, 81]
+
+### **8.4 Data Privacy & Security by Design**
+*   **Transparency:** The Privacy Policy will be written in plain language and easily accessible.[18, 19, 20, 21] App store listings will be fully transparent about data collection practices.[18, 22, 23]
+*   **User Control:** A "Privacy & Safety Center" will provide users with granular control over their data and a one-tap "Delete All My Data" function.
+
+---
+
+## **9.0 Quality Assurance (QA) Plan**
+
+The QA plan will ensure a high-quality, stable, and secure product.
+*   **Automated Testing:** Unit and integration tests for backend services; End-to-End (E2E) tests for critical user flows (e.g., purchase, pack creation).
+*   **Manual Testing:** The QA team will perform exploratory testing on new features across a matrix of devices and browsers.
+*   **Performance Testing:** Load testing will be conducted on APIs to ensure scalability.
+*   **Security Audits:** Regular penetration testing and vulnerability scanning by a third-party security firm.[16, 17]
+*   **Beta Program:** A closed beta with recruited creators and consumers will be conducted before public launch to gather real-world feedback.
+
+---
+
+## **10.0 Product Roadmap & Sprint Plan**
+
+This agile roadmap is structured in two-week sprints, focusing on delivering a Minimum Viable Product (MVP) first.
+
+### **Phase 1: MVP Development (16 Weeks)**
+**Goal:** Launch a functional two-sided marketplace with core creation and consumption features.
+
+| Sprint | Duration | Key Features & Goals |
+| :--- | :--- | :--- |
+| **1-2** | 4 Weeks | **Foundation & Auth:** Setup cloud infrastructure, databases. Implement User & Creator data models. Build secure authentication service (login, registration, JWT). |
+| **3-4** | 4 Weeks | **Creator Suite MVP:** Build web-based Pack Builder UI (card creation, ordering, levels). Implement basic Creator Profile and Dashboard. |
+| **5-6** | 4 Weeks | **AI Co-Pilot & Publishing:** Integrate LLM for AI Co-Pilot (Ideation & Structuring). Build pack submission and moderation queue backend. |
+| **7-8** | 4 Weeks | **Consumer App & Marketplace MVP:** Build mobile app marketplace (browse, search), in-app purchase flow, and basic gameplay interface. |
+
+### **Phase 2: Go-to-Market & Enhancement (12 Weeks)**
+**Goal:** Seed the platform with content, launch publicly, and iterate based on feedback.
+
+| Sprint | Duration | Key Features & Goals |
+| :--- | :--- | :--- |
+| **9-10** | 4 Weeks | **Creator Seeding & Onboarding:** Refine Creator Suite based on feedback. Build creator payout reporting. **Business Goal:** Onboard 50+ Founding Creators.[90, 91, 92, 93, 94] |
+| **11-12** | 4 Weeks | **Public Launch & Community:** Implement ratings and reviews. Build "Follow Creator" functionality. **Business Goal:** Launch on App Stores. Execute marketing push.[95, 96, 97, 98, 99, 100] |
+| **13-14** | 4 Weeks | **Analytics & Gamification:** Build Creator Analytics Dashboard. Implement consumer gamification (streaks, badges).[38, 39, 40, 41, 42] |
+
+### **Phase 3: Scale & Differentiate (Ongoing)**
+**Goal:** Expand features to solidify market leadership.
+
+| Feature Area | Description |
+| :--- | :--- |
+| **Creator Economy** | Implement Creator Tiers & Rewards (e.g., Bronze, Silver, Gold) with escalating benefits like reduced commission rates and promotional featuring. |
+| **Rich Media** | Add support for audio, video, and haptic feedback in the Pack Builder and mobile app.[58, 59, 60, 61, 62, 63] |
+| **Advanced AI** | Enhance the Co-Pilot with content generation and refinement capabilities. Introduce AI-powered recommendations in the marketplace. |
+| **Globalization** | Implement cultural adaptation framework and localization for key international markets. |
+| **B2B Offering** | Explore a "Project Connect for Business" portal for therapists, corporate wellness, and team-building, with features like client management and group session tools.[101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 4, 89] |
+
+
+-----
+
+## **Project Connect: AI Developer Handoff Package**
+
+**A Note on AI-Assisted Development:** This package provides a detailed blueprint to accelerate development. However, it is not a substitute for human oversight. A skilled development team should review, refine, and test the generated code, especially for complex logic, security implementations, and user experience nuances. The agile sprint plan outlined in the PRD should be followed, incorporating continuous testing and iteration based on real-world feedback.
+
+-----
+
+### **1.0 Agile Development Artifacts: User Stories & Acceptance Criteria**
+
+This section provides granular requirements in an agile format for a core feature: **Creating a New Pack**.
+
+| User Story | Acceptance Criteria |
+| :--- | :--- |
+| **As a Creator, I want to start a new pack creation process so that I can define its core concept.** | 1. From the Creator Dashboard, there must be a "Create New Pack" button. \<br\> 2. Clicking this button must launch the AI Co-Pilot conversational interface. \<br\> 3. The AI Co-Pilot must greet me and ask for the initial idea for my pack. |
+| **As a Creator, I want the AI Co-Pilot to help me structure my pack so that it follows a psychologically effective format.** | 1. After I describe my idea, the AI must ask clarifying questions about the target audience and desired tone.[1, 2] \<br\> 2. The AI must then propose a structural framework (e.g., a three-level model) based on my input.[3, 4] \<br\> 3. I must be able to accept, reject, or ask for an alternative structure. |
+| **As a Creator, I want to add and edit different types of cards in a visual builder so that I can populate my pack with content.** | 1. The Pack Builder must have a visual interface showing cards organized by level. \<br\> 2. I must be able to add new cards of different types: "Question," "Action," and "Wildcard." \<br\> 3. I must be able to edit the text content of each card. \<br\> 4. I must be able to upload an image (`.jpg`, `.png`) for each card. \<br\> 5. I must be able to drag and drop cards to reorder them within and between levels. |
+| **As a Creator, I want to set a price for my pack and submit it for review so that I can publish it to the marketplace.** | 1. In the Pack settings, there must be a field to set a price within the platform's allowed range. \<br\> 2. There must be a "Submit for Review" button that is only enabled when the pack meets minimum requirements (e.g., title, description, at least 10 cards). \<br\> 3. Clicking "Submit" must change the pack's status to "Pending Review" and lock it from further editing. |
+
+-----
+
+### **2.0 UI/UX Design System Specification**
+
+This design system ensures a consistent and intuitive user experience across the web and mobile platforms.
+
+| Element | Specification |
+| :--- | :--- |
+| **Color Palette** | **Primary:** `#4A90E2` (Calm Blue) \<br\> **Secondary:** `#F5A623` (Warm Orange) \<br\> **Accent/Success:** `#7ED321` (Vibrant Green) \<br\> **Error/Warning:** `#D0021B` (Alert Red) \<br\> **Text (Dark):** `#4A4A4A` \<br\> **Background (Light):** `#F9F9F9` |
+| **Typography** | **Headings (H1, H2, H3):** Font Family: `Lato`, Weight: `Bold` \<br\> **Body Text:** Font Family: `Open Sans`, Weight: `Regular` \<br\> **Labels/Buttons:** Font Family: `Open Sans`, Weight: `Semibold` |
+| **Component Library** | **Button (Primary):** Solid `#4A90E2` background, white text. Hover state: `#357ABD`. Disabled state: `#D8D8D8`. \<br\> **Button (Secondary):** `#4A90E2` outline, `#4A90E2` text. Hover state: Light blue background fill. \<br\> **Input Field:** Light grey border, placeholder text. Focus state: `#4A90E2` border. Error state: `#D0021B` border with error message below. \<br\> **Card (Gameplay):** Rounded corners, subtle drop shadow, large readable body text. \<br\> **Modal:** Semi-transparent overlay, centered content box with clear "Close" (X) icon. |
+| **Iconography** | Use the Material Design Icons library for consistency. |
+
+-----
+
+### **3.0 Detailed API Specification (OpenAPI 3.0 Snippet)**
+
+This machine-readable format can be directly used by code generation tools to scaffold the API.
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Project Connect API
+  version: 1.0.0
+paths:
+  /creator/packs:
+    get:
+      summary: Get all packs for the authenticated creator
+      security:
+        - bearerAuth:
+      responses:
+        '200':
+          description: A list of packs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pack'
+    post:
+      summary: Create a new draft pack
+      security:
+        - bearerAuth:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Pack created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+components:
+  schemas:
+    Pack:
+      type: object
+      properties:
+        pack_id:
+          type: string
+          format: uuid
+        creator_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        status:
+          type: string
+          enum: [draft, pending_review, published, rejected]
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+```
+
+-----
+
+### **4.0 Database Schema (SQL DDL)**
+
+This provides the direct SQL commands to create the core database tables.
+
+```sql
+CREATE TABLE Users (
+    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_creator BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE Creators (
+    creator_id UUID PRIMARY KEY,
+    display_name VARCHAR(100) NOT NULL,
+    bio TEXT,
+    payout_details_token VARCHAR(255), -- Stripe Connect Account ID
+    tier_level VARCHAR(50) DEFAULT 'Bronze',
+    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Packs (
+    pack_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    creator_id UUID NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    cover_image_url VARCHAR(255),
+    price NUMERIC(10, 2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'draft',
+    avg_rating NUMERIC(3, 2) DEFAULT 0.00,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    FOREIGN KEY (creator_id) REFERENCES Creators(creator_id)
+);
+
+CREATE TABLE Cards (
+    card_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    pack_id UUID NOT NULL,
+    card_type VARCHAR(50) NOT NULL, -- 'Question', 'Action', 'Wildcard'
+    content_json JSONB,
+    level INTEGER NOT NULL,
+    order_in_pack INTEGER NOT NULL,
+    FOREIGN KEY (pack_id) REFERENCES Packs(pack_id) ON DELETE CASCADE
+);
+
+-- Additional tables for Purchases, Reviews, ModerationLog as per PRD
+```
+
+-----
+
+### **5.0 AI Co-Pilot Prompt Engineering Blueprint**
+
+This is the core logic for the platform's key differentiator. It uses a prompt chaining strategy to guide creators.[3, 5, 6, 4, 7]
+
+**System Prompt (Initial Instruction for the LLM):**
+"You are the 'AI Co-Pilot,' a friendly, encouraging, and expert guide for creating connection-based games. Your persona is a blend of a game designer and a relationship therapist. Your goal is to help creators transform their ideas into well-structured, psychologically sound, and engaging `Packs`. You must follow the principles of conversational design: be cooperative, goal-oriented, quick, and clear.[1, 8, 2, 9, 10] Always ask open-ended, Socratic questions to help the creator think deeply about their concept.[11] Never write the entire pack for them; instead, act as a brainstorming partner and structural consultant."
+
+**Prompt Chain for Pack Creation:**
+
+1.  **Ideation Prompt:**
+      * **AI:** "Welcome to the Creator Suite\! I'm your AI Co-Pilot, and I'm here to help you create an amazing connection experience. To start, what's the core idea or theme for your new Pack?"
+      * **User:** "I want to make a game for families to connect across different generations."
+2.  **Scoping Prompt (Chain):**
+      * **AI:** "That's a wonderful goal\! To help me understand better, who is the primary audience? Are we talking about young kids and grandparents, or adult siblings and their parents?" [12, 1]
+      * **User:** "Mostly for adult children visiting their aging parents."
+      * **AI:** "Great, that gives us a clear focus. What's the main feeling you want players to have after a session? Should it be lighthearted and nostalgic, or more focused on deeper understanding and healing?"
+3.  **Structuring Prompt (Chain):**
+      * **AI:** "Based on your goal of fostering deeper understanding, a proven structure is to move from lighter topics to more meaningful ones. How does a three-level framework sound? We could call them: Level 1: 'Shared Memories,' Level 2: 'Different Perspectives,' and Level 3: 'Future Hopes.' This helps build safety and trust gradually." [13, 14]
+      * **User:** "I like that structure."
+4.  **Content Brainstorming Prompt (Chain):**
+      * **AI:** "Perfect\! Now let's move to the Pack Builder. For Level 1: 'Shared Memories,' a good starting point is a question that draws on family history. For example, a prompt inspired by Narrative Therapy could be: 'Share a family story that has been told so many times it's become a legend.' [15, 16, 17, 18, 19, 20] What do you think of that as a starting point?"
+5.  **Refinement Prompt (Final Check):**
+      * **AI:** "This pack is looking great\! I've done a quick analysis. I noticed that Level 2 has five very emotionally intense questions in a row. To improve the player experience, you might consider adding a lighthearted 'Action' card, like 'Collaboratively draw the family tree from memory,' to provide a moment of playful connection before diving deeper." [21]
+
+-----
+
+### **6.0 Security & Privacy Implementation Checklist**
+
+This checklist provides specific, actionable tasks for the AI code generator and development team.
+
+| Area | Task | Rationale |
+| :--- | :--- | :--- |
+| **Authentication** | Implement JWTs with a short expiry (e.g., 15 minutes) and a secure refresh token rotation system. | Minimizes the window of opportunity if an access token is compromised.[22, 23] |
+| | Enforce strong password policies (e.g., minimum length, complexity) and use a robust hashing algorithm like Argon2. | Protects against brute-force and rainbow table attacks. |
+| **API Security** | Use middleware for rate limiting on all authentication and sensitive endpoints. | Prevents Denial-of-Service (DoS) and brute-force attacks.[22] |
+| | Implement strict input validation and sanitization on all API inputs to prevent injection attacks (SQLi, XSS). | A fundamental security practice to protect the database and users.[22, 23] |
+| | Use Certificate Pinning in the mobile applications. | Prevents sophisticated man-in-the-middle (MITM) attacks.[22] |
+| **Data Privacy** | Ensure all user-facing forms include a checkbox to agree to the Terms of Service and Privacy Policy, which cannot be skipped.[24] | Required for legal compliance and user transparency. |
+| | Build a "Privacy Center" where users can view all their personal data and initiate a "Right to be Forgotten" request. | Complies with data protection regulations like GDPR and CCPA.[25, 26, 27, 28, 29, 30] |
+| | Anonymize all data used for analytics (e.g., `QualityScore` calculation). Do not store personally identifiable information (PII) with engagement metrics. | Protects user privacy while still allowing for product improvement. |
+| | Implement a cron job to automatically and permanently delete user data 30 days after an account deletion request is confirmed. | Ensures data is not retained longer than necessary.[31] |
+
+-----

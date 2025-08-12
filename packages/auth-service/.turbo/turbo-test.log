@@ -1,0 +1,12 @@
+
+> auth-service@0.1.0 test /Users/abrahamkang/Projects/couples-card-game-codex/packages/auth-service
+> jest --config ./jest.config.js --passWithNoTests
+
+PASS src/routes/auth.oauth-mfa.test.ts
+PASS src/routes/auth.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       11 passed, 11 total
+Snapshots:   0 total
+Time:        6.064 s
+Ran all test suites.

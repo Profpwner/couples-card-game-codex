@@ -1,0 +1,42 @@
+name: Storybook Preview (GitHub Pages)
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - name: Install deps
+        run: pnpm install
+      - name: Build Storybook
+        run: pnpm --filter web-app build-storybook
+      - name: Deploy to gh-pages under PR path
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: apps/web/storybook-static
+          destination_dir: pr-${{ github.event.number }}
+          keep_files: true
+      - name: Comment PR with preview link
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+            Storybook preview deployed for this PR:
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.number }}/

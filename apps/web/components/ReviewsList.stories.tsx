@@ -5,6 +5,7 @@ import type { Review } from './ReviewItem';
 const meta: Meta<typeof ReviewsList> = {
   title: 'Marketplace/ReviewsList',
   component: ReviewsList,
+  parameters: { a11y: { disable: false } },
 };
 export default meta;
 type Story = StoryObj<typeof ReviewsList>;
@@ -22,4 +23,3 @@ export const SortedNewest: Story = { args: { reviews: base, sort: 'newest', visi
 export const SortedHighest: Story = { args: { reviews: base, sort: 'highest', visible: 6 } };
 export const SortedLowest: Story = { args: { reviews: base, sort: 'lowest', visible: 6 } };
 export const Paginated: Story = { args: { reviews: base, sort: 'newest', visible: 3 } };
-

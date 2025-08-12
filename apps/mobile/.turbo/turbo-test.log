@@ -1,0 +1,51 @@
+
+> mobile-app@0.1.0 test /Users/abrahamkang/Projects/couples-card-game-codex/apps/mobile
+> jest --passWithNoTests
+
+(node:83536) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/HomeScreen.test.tsx (7.244 s)
+(node:83535) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:83537) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/MarketplaceList.test.tsx (7.382 s)
+PASS __tests__/MarketplaceDetail.test.tsx (7.462 s)
+  ● Console
+
+    console.error
+      Warning: An update to MarketplaceDetail inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at route (/Users/abrahamkang/Projects/couples-card-game-codex/apps/mobile/src/screens/MarketplaceDetail.tsx:10:45)
+
+      48 |       if (isFollowing) await unfollowCreator(pack.creator_id, userId);
+      49 |       else await followCreator(pack.creator_id, userId);
+    > 50 |       setIsFollowing(!isFollowing);
+         |       ^
+      51 |     } catch (e) {
+      52 |       console.error(e);
+      53 |     }
+
+      at printWarning (../../node_modules/.pnpm/react-test-renderer@18.2.0_react@18.2.0/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:72:30)
+      at error (../../node_modules/.pnpm/react-test-renderer@18.2.0_react@18.2.0/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:46:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../../node_modules/.pnpm/react-test-renderer@18.2.0_react@18.2.0/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:16677:9)
+      at scheduleUpdateOnFiber (../../node_modules/.pnpm/react-test-renderer@18.2.0_react@18.2.0/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14877:5)
+      at dispatchSetState (../../node_modules/.pnpm/react-test-renderer@18.2.0_react@18.2.0/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:7510:7)
+      at setIsFollowing (src/screens/MarketplaceDetail.tsx:50:7)
+      at asyncGeneratorStep (../../node_modules/.pnpm/@babel+runtime@7.28.2/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (../../node_modules/.pnpm/@babel+runtime@7.28.2/node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+
+Test Suites: 3 passed, 3 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        9.708 s
+Ran all test suites.

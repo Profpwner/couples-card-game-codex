@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+*.env
+/.turbo
+/.next
+/apps/web/.next
+/apps/mobile/android
+/apps/mobile/ios
